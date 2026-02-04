@@ -5,13 +5,10 @@ import project20280.list.DoublyLinkedList;
 
 public class LinkedStack<E> implements Stack<E> {
 
-    DoublyLinkedList<E> ll;
-
-    public static void main(String[] args) {
-    }
+    private DoublyLinkedList<E> ll;
 
     public LinkedStack() {
-        // TODO
+        ll = new DoublyLinkedList<>();
     }
 
     @Override
@@ -26,22 +23,32 @@ public class LinkedStack<E> implements Stack<E> {
 
     @Override
     public void push(E e) {
-        // TODO
+        ll.addFirst(e);
     }
 
     @Override
     public E top() {
-        // TODO
-        return null;
+        return ll.first();
     }
 
     @Override
     public E pop() {
-        // TODO
-        return null;
+        return ll.removeFirst();
     }
 
     public String toString() {
         return ll.toString();
+    }
+
+    public static void main(String[] args) {
+        Stack<Integer> s = new LinkedStack<>();
+        System.out.println(s.pop()); // null (if your DLL returns null on removeFirst when empty)
+        s.push(10);
+        s.push(20);
+        System.out.println(s.top()); // 20
+        System.out.println(s.pop()); // 20
+        System.out.println(s.pop()); // 10
+        System.out.println(s.pop()); // null
+        System.out.println(s);
     }
 }
