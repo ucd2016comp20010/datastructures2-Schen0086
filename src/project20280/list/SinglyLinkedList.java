@@ -1,150 +1,199 @@
 package project20280.list;
 
 import project20280.interfaces.List;
-
 import java.util.Iterator;
 
-public class SinglyLinkedList<E> implements List<E> {
+public class SinglyLinkedList<E> implements List<E>, Iterable<E> {
 
     private static class Node<E> {
 
-        private final E element;            // reference to the element stored at this node
+        private final E element;   // data stored in this node
+        private Node<E> next;      // reference to the next node
 
-        /**
-         * A reference to the subsequent node in the list
-         */
-        private Node<E> next;         // reference to the subsequent node in the list
-
-        /**
-         * Creates a node with the given element and next node.
-         *
-         * @param e the element to be stored
-         * @param n reference to a node that should follow the new node
-         */
+        // create a node with an element and next reference
         public Node(E e, Node<E> n) {
-            // TODO
+            this.element = e;
+            this.next = n;
         }
 
-        // Accessor methods
-
-        /**
-         * Returns the element stored at the node.
-         *
-         * @return the element stored at the node
-         */
+        // return the stored element
         public E getElement() {
-            return null;
+            return element;
         }
 
-        /**
-         * Returns the node that follows this one (or null if no such node).
-         *
-         * @return the following node
-         */
+        // return the next node
         public Node<E> getNext() {
-            // TODO
-            return null;
+            return next;
         }
 
-        // Modifier methods
-
-        /**
-         * Sets the node's next reference to point to Node n.
-         *
-         * @param n the node that should follow this one
-         */
+        // update the next reference
         public void setNext(Node<E> n) {
-            // TODO
+            this.next = n;
         }
-    } //----------- end of nested Node class -----------
+    }
 
-    /**
-     * The head node of the list
-     */
-    private Node<E> head = null;               // head node of the list (or null if empty)
+    private Node<E> head = null;   // first node in the list
+    private int size = 0;          // number of elements
 
+    public SinglyLinkedList() { }
 
-    /**
-     * Number of nodes in the list
-     */
-    private int size = 0;                      // number of nodes in the list
-
-    public SinglyLinkedList() {
-    }              // constructs an initially empty list
-
-    //@Override
+    // return number of elements in the list
+    @Override
     public int size() {
-        // TODO
-        return 0;
+        return size;
     }
 
-    //@Override
+    // check if the list is empty
+    @Override
     public boolean isEmpty() {
-        // TODO
-        return false;
+        return size == 0;
     }
 
+    // return element at a given position
     @Override
     public E get(int position) {
-        // TODO
-        return null;
+        if (position < 0 || position >= size) return null;
+
+        Node<E> curr = head;
+        // move forward position times
+        for (int i = 0; i < position; i++) {
+            curr = curr.getNext();
+        }
+        return curr.getElement();
     }
 
+    // insert element at a specific position
     @Override
     public void add(int position, E e) {
-        // TODO
+        if (position < 0 || position > size) return;
+
+        // inserting at the front
+        if (position == 0) {
+            addFirst(e);
+            return;
+        }
+
+        Node<E> prev = head;
+        // find node before insertion point
+        for (int i = 0; i < position - 1; i++) {
+            prev = prev.getNext();
+        }
+
+        // link new node into the list
+        Node<E> newest = new Node<>(e, prev.getNext());
+        prev.setNext(newest);
+        size++;
     }
 
-
+    // insert element at the beginning
     @Override
     public void addFirst(E e) {
-        // TODO
+        head = new Node<>(e, head);  // new node points to old head
+        size++;
     }
 
+    // insert element at the end
     @Override
     public void addLast(E e) {
-        // TODO
+        Node<E> newest = new Node<>(e, null);
+
+        // empty list case
+        if (head == null) {
+            head = newest;
+            size++;
+            return;
+        }
+
+        // move to the last node
+        Node<E> curr = head;
+        while (curr.getNext() != null) {
+            curr = curr.getNext();
+        }
+
+        curr.setNext(newest);
+        size++;
     }
 
+    // remove element at a specific position
     @Override
     public E remove(int position) {
-        // TODO
-        return null;
+        if (position < 0 || position >= size) return null;
+
+        // removing first element
+        if (position == 0) return removeFirst();
+
+        // removing last element
+        if (position == size - 1) return removeLast();
+
+        Node<E> prev = head;
+        // find node before the one to remove
+        for (int i = 0; i < position - 1; i++) {
+            prev = prev.getNext();
+        }
+
+        Node<E> target = prev.getNext();
+        prev.setNext(target.getNext()); // bypass removed node
+        size--;
+        return target.getElement();
     }
 
+    // remove and return first element
     @Override
     public E removeFirst() {
-        // TODO
-        return null;
+        if (head == null) return null;
+
+        E val = head.getElement();
+        head = head.getNext();  // move head forward
+        size--;
+        return val;
     }
 
+    // remove and return last element
     @Override
     public E removeLast() {
-        // TODO
-        return null;
+        if (head == null) return null;
+
+        // single element case
+        if (head.getNext() == null) return removeFirst();
+
+        Node<E> prev = head;
+        // move to second-last node
+        while (prev.getNext().getNext() != null) {
+            prev = prev.getNext();
+        }
+
+        Node<E> last = prev.getNext();
+        prev.setNext(null);  // remove last node
+        size--;
+        return last.getElement();
     }
 
-    //@Override
+    // return iterator for the list
+    @Override
     public Iterator<E> iterator() {
-        return new SinglyLinkedListIterator<E>();
+        return new SinglyLinkedListIterator<>();
     }
 
-    private class SinglyLinkedListIterator<E> implements Iterator<E> {
-        Node<E> curr = (Node<E>) head;
+    // iterator implementation
+    private class SinglyLinkedListIterator<T> implements Iterator<T> {
+        Node<T> curr = (Node<T>) head;
 
+        // check if more elements exist
         @Override
         public boolean hasNext() {
             return curr != null;
         }
 
+        // return current element and move forward
         @Override
-        public E next() {
-            E res = curr.getElement();
+        public T next() {
+            T res = curr.getElement();
             curr = curr.next;
             return res;
         }
     }
 
+    // convert list to string format
     public String toString() {
         StringBuilder sb = new StringBuilder("[");
         Node<E> curr = head;
@@ -158,24 +207,31 @@ public class SinglyLinkedList<E> implements List<E> {
         return sb.toString();
     }
 
-    public static void main(String[] args) {
-        SinglyLinkedList<Integer> ll = new SinglyLinkedList<Integer>();
-        System.out.println("ll " + ll + " isEmpty: " + ll.isEmpty());
-        //LinkedList<Integer> ll = new LinkedList<Integer>();
+    // Q10 - Reverse: change links, not data, using three pointers
+    public void reverse() {
+        Node<E> prev = null;        // will become the new head
+        Node<E> curr = head;        // start from current head
+        Node<E> next;        // temporary pointer
 
-        ll.addFirst(0);
-        ll.addFirst(1);
-        ll.addFirst(2);
-        ll.addFirst(3);
-        ll.addFirst(4);
-        ll.addLast(-1);
-        //ll.removeLast();
-        //ll.removeFirst();
-        //System.out.println("I accept your apology");
-        //ll.add(3, 2);
-        System.out.println(ll);
-        ll.remove(5);
-        System.out.println(ll);
+        while (curr != null) {
+            next = curr.getNext();  // store next node
+            curr.setNext(prev);     // reverse the link
+            prev = curr;            // move prev forward
+            curr = next;            // move curr forward
+        }
 
+        head = prev;                // update head to new front
     }
+
+    // Q11 - Clone: create a new list and copy elements one by one
+    public SinglyLinkedList<E> copy() {
+        SinglyLinkedList<E> twin = new SinglyLinkedList<E>();
+        Node<E> tmp = head;
+        while (tmp != null) {
+            twin.addLast(tmp.getElement());
+            tmp = tmp.next;
+        }
+        return twin;
+    }
+
 }

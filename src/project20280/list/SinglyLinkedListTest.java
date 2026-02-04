@@ -119,4 +119,95 @@ class SinglyLinkedListTest {
         assertEquals("[1, 2, 3]", ll.toString());
     }
 
+    // Q10 & Q11 Junit Tests
+    @Test
+    void testReverseEmpty() {
+        SinglyLinkedList<Integer> ll = new SinglyLinkedList<>();
+        ll.reverse();
+        assertEquals("[]", ll.toString());
+        assertEquals(0, ll.size());
+    }
+
+    @Test
+    void testReverseSingle() {
+        SinglyLinkedList<Integer> ll = new SinglyLinkedList<>();
+        ll.addLast(42);
+
+        ll.reverse();
+
+        assertEquals("[42]", ll.toString());
+        assertEquals(1, ll.size());
+    }
+
+    @Test
+    void testReverseMultiple() {
+        SinglyLinkedList<Integer> ll = new SinglyLinkedList<>();
+        ll.addLast(1);
+        ll.addLast(2);
+        ll.addLast(3);
+        ll.addLast(4);
+
+        ll.reverse();
+
+        assertEquals("[4, 3, 2, 1]", ll.toString());
+        assertEquals(4, ll.size());
+    }
+
+    @Test
+    void testReverseTwiceReturnsOriginal() {
+        SinglyLinkedList<Integer> ll = new SinglyLinkedList<>();
+        ll.addLast(1);
+        ll.addLast(2);
+        ll.addLast(3);
+
+        ll.reverse();
+        ll.reverse();
+
+        assertEquals("[1, 2, 3]", ll.toString());
+        assertEquals(3, ll.size());
+    }
+
+    @Test
+    void testCopyEmpty() {
+        SinglyLinkedList<Integer> ll = new SinglyLinkedList<>();
+        SinglyLinkedList<Integer> twin = ll.copy();
+
+        assertNotSame(ll, twin);
+        assertEquals("[]", twin.toString());
+        assertEquals(0, twin.size());
+    }
+
+    @Test
+    void testCopyContentsSame() {
+        SinglyLinkedList<Integer> ll = new SinglyLinkedList<>();
+        ll.addLast(1);
+        ll.addLast(2);
+        ll.addLast(3);
+
+        SinglyLinkedList<Integer> twin = ll.copy();
+
+        assertNotSame(ll, twin);
+        assertEquals(ll.toString(), twin.toString());
+        assertEquals(ll.size(), twin.size());
+    }
+
+    @Test
+    void testCopyIsIndependent() {
+        SinglyLinkedList<Integer> ll = new SinglyLinkedList<>();
+        ll.addLast(1);
+        ll.addLast(2);
+        ll.addLast(3);
+
+        SinglyLinkedList<Integer> twin = ll.copy();
+
+        // change original, clone should not change
+        ll.removeFirst();
+        assertEquals("[2, 3]", ll.toString());
+        assertEquals("[1, 2, 3]", twin.toString());
+
+        // change clone, original should not change
+        twin.addLast(99);
+        assertEquals("[1, 2, 3, 99]", twin.toString());
+        assertEquals("[2, 3]", ll.toString());
+    }
 }

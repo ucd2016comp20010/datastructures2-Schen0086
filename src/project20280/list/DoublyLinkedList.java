@@ -1,16 +1,17 @@
 package project20280.list;
 
 import project20280.interfaces.List;
-
 import java.util.Iterator;
 
-public class DoublyLinkedList<E> implements List<E> {
+public class DoublyLinkedList<E> implements List<E>, Iterable<E> {
 
+    // Node for doubly linked list
     private static class Node<E> {
-        private final E data;
-        private Node<E> next;
-        private final Node<E> prev;
+        private final E data;     // element stored in the node
+        private Node<E> next;     // reference to next node
+        private Node<E> prev;     // reference to previous node
 
+        // create a node with links to previous and next
         public Node(E e, Node<E> p, Node<E> n) {
             data = e;
             prev = p;
@@ -29,53 +30,92 @@ public class DoublyLinkedList<E> implements List<E> {
             return prev;
         }
 
+        // update next reference
+        public void setNext(Node<E> n) {
+            next = n;
+        }
+
+        // update previous reference
+        public void setPrev(Node<E> p) {
+            prev = p;
+        }
     }
 
-    private final Node<E> head;
-    private final Node<E> tail;
-    private final int size = 0;
+    private final Node<E> head;   // header sentinel node
+    private final Node<E> tail;   // trailer sentinel node
+    private int size = 0;         // number of real elements
 
+    // create empty list with head and tail linked together
     public DoublyLinkedList() {
-        head = new Node<E>(null, null, null);
-        tail = new Node<E>(null, head, null);
-        head.next = tail;
+        head = new Node<>(null, null, null);
+        tail = new Node<>(null, head, null);
+        head.setNext(tail);
     }
 
+    // insert element between two existing nodes
     private void addBetween(E e, Node<E> pred, Node<E> succ) {
-        // TODO
+        Node<E> newest = new Node<>(e, pred, succ);
+        pred.setNext(newest);
+        succ.setPrev(newest);
+        size++;
     }
 
+    // return number of elements
     @Override
     public int size() {
-        // TODO
-        return 0;
+        return size;
     }
 
+    // check if list is empty
     @Override
     public boolean isEmpty() {
-        // TODO
-        return false;
+        return size == 0;
     }
 
+    // get node at index i
+    private Node<E> nodeAt(int i) {
+        if (i < 0 || i >= size) return null;
+
+        // traverse from head or tail depending on index
+        if (i <= size / 2) {
+            Node<E> curr = head.getNext();
+            for (int k = 0; k < i; k++) curr = curr.getNext();
+            return curr;
+        } else {
+            Node<E> curr = tail.getPrev();
+            for (int k = size - 1; k > i; k--) curr = curr.getPrev();
+            return curr;
+        }
+    }
+
+    // return element at index i
     @Override
     public E get(int i) {
-        // TODO
-        return null;
+        Node<E> n = nodeAt(i);
+        return (n == null) ? null : n.getData();
     }
 
+    // insert element at index i
     @Override
     public void add(int i, E e) {
-        // TODO
+        if (i < 0 || i > size) return;
+
+        Node<E> succ = (i == size) ? tail : nodeAt(i);
+        Node<E> pred = succ.getPrev();
+
+        addBetween(e, pred, succ);
     }
 
+    // remove element at index i
     @Override
     public E remove(int i) {
-        // TODO
-        return null;
+        Node<E> n = nodeAt(i);
+        return (n == null) ? null : remove(n);
     }
 
-    private class DoublyLinkedListIterator<E> implements Iterator<E> {
-        Node<E> curr = (Node<E>) head.next;
+    // iterator for traversing the list
+    private class DoublyLinkedListIterator implements Iterator<E> {
+        Node<E> curr = head.getNext();
 
         @Override
         public boolean hasNext() {
@@ -84,86 +124,77 @@ public class DoublyLinkedList<E> implements List<E> {
 
         @Override
         public E next() {
-            E res = curr.data;
-            curr = curr.next;
+            E res = curr.getData();
+            curr = curr.getNext();
             return res;
         }
     }
 
     @Override
     public Iterator<E> iterator() {
-        return new DoublyLinkedListIterator<E>();
+        return new DoublyLinkedListIterator();
     }
 
+    // unlink a node and return its data
     private E remove(Node<E> n) {
-        // TODO
-        return null;
+        Node<E> pred = n.getPrev();
+        Node<E> succ = n.getNext();
+
+        pred.setNext(succ);
+        succ.setPrev(pred);
+
+        size--;
+        return n.getData();
     }
 
+    // return first element
     public E first() {
-        if (isEmpty()) {
-            return null;
-        }
-        return head.next.getData();
+        if (isEmpty()) return null;
+        return head.getNext().getData();
     }
 
+    // return last element
     public E last() {
-        // TODO
-        return null;
+        if (isEmpty()) return null;
+        return tail.getPrev().getData();
     }
 
+    // remove and return first element
     @Override
     public E removeFirst() {
-        // TODO
-        return null;
+        if (isEmpty()) return null;
+        return remove(head.getNext());
     }
 
+    // remove and return last element
     @Override
     public E removeLast() {
-        // TODO
-        return null;
+        if (isEmpty()) return null;
+        return remove(tail.getPrev());
     }
 
+    // add element at the end
     @Override
     public void addLast(E e) {
-        // TODO
+        addBetween(e, tail.getPrev(), tail);
     }
 
+    // add element at the beginning
     @Override
     public void addFirst(E e) {
-        // TODO
+        addBetween(e, head, head.getNext());
     }
 
+    // return string representation of list
     public String toString() {
         StringBuilder sb = new StringBuilder("[");
-        Node<E> curr = head.next;
+        Node<E> curr = head.getNext();
         while (curr != tail) {
-            sb.append(curr.data);
-            curr = curr.next;
-            if (curr != tail) {
-                sb.append(", ");
-            }
+            sb.append(curr.getData());
+            curr = curr.getNext();
+            if (curr != tail) sb.append(", ");
         }
         sb.append("]");
         return sb.toString();
-    }
-
-    public static void main(String[] args) {
-        DoublyLinkedList<Integer> ll = new DoublyLinkedList<Integer>();
-        ll.addFirst(0);
-        ll.addFirst(1);
-        ll.addFirst(2);
-        ll.addLast(-1);
-        System.out.println(ll);
-
-        ll.removeFirst();
-        System.out.println(ll);
-
-        ll.removeLast();
-        System.out.println(ll);
-
-        for (Integer e : ll) {
-            System.out.println("value: " + e);
-        }
     }
 }
