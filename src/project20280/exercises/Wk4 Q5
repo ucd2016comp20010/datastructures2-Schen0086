@@ -1,0 +1,32 @@
+A “descendant” of node p means every node strictly below it (children, grandchildren, etc.), not including p.
+
+-----------------------------------------------------------------------------------
+
+function countDescendants(T, p):
+
+    // Base case: no node means no descendants
+    if p is null:
+        return 0
+
+    total = 0     // Stores the total number of descendants of p
+
+    // If a left child exists, it is a descendant
+    // Add 1 for the child, plus all of its descendants
+    if T.left(p) is not null:
+        total = total + 1 + countDescendants(T, T.left(p))
+
+    // If a right child exists, it is also a descendant
+    // Add 1 for the child, plus all of its descendants
+    if T.right(p) is not null:
+        total = total + 1 + countDescendants(T, T.right(p))
+
+    // Return the total number of descendants of p
+    return total
+
+-----------------------------------------------------------------------------------
+
+This uses only:
+
+- Left(p)
+- Right(p)
+- and counts each child as a descendant (+1) plus all descendants of that child (recursive call).

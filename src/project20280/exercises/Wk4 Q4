@@ -1,0 +1,71 @@
+(a) Preorder gives "EXAMFUN"
+
+Preorder = root, left, right.
+So we want the visit order to be: E, X, A, M, F, U, N.
+
+Valid tree:
+        E
+       / \
+      X   F
+     / \ / \
+    A  M U  N
+
+Check preorder:
+
+- E
+- Left subtree (X, A, M)
+- Right subtree (F, U, N)
+
+-----------------------------------------------------------------------------------
+
+(b) Inorder gives "EXAMFUN"
+
+Inorder = left, root, right.
+We want: E, X, A, M, F, U, N.
+
+Valid tree:
+E
+ \
+  X
+   \
+    A
+     \
+      M
+       \
+        F
+         \
+          U
+           \
+            N
+
+Check inorder:
+
+- Inorder of E: left empty → E, then inorder of right chain gives X A M F U N
+
+-----------------------------------------------------------------------------------
+
+(c) Postorder gives "EXAMFUN"
+
+Postorder = left, right, root.
+We want: E, X, A, M, F, U, N with N last, so N must be the root.
+
+Make the left subtree’s postorder be E X A M F U and root be N.
+
+Valid Tree:
+            N
+           /
+          U
+         /
+        F
+       /
+      M
+     /
+    A
+   /
+  X
+ /
+E
+
+Check postorder (all left chain):
+
+- Visits deepest first: E, then X, then A, then M, then F, then U, then N
