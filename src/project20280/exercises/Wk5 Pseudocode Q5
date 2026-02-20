@@ -1,0 +1,37 @@
+function DIAMETER(T):
+
+    // If the tree is empty, there is no path
+    if T.root() is null:
+        return 0
+
+    // Helper returns both height and diameter for the subtree
+    result = DIAMETER_HELPER(T, T.root())
+
+    // Diameter is the number of nodes on the longest path in the whole tree
+    return result.diameter
+
+
+function DIAMETER_HELPER(T, p):
+
+    // Base case: empty subtree has height 0 and diameter 0
+    if p is null:
+        return (height = 0, diameter = 0)
+
+    // Compute results for left and right subtrees
+    leftRes  = DIAMETER_HELPER(T, T.left(p))
+    rightRes = DIAMETER_HELPER(T, T.right(p))
+
+    // Height of the subtree at p is 1 (for p) plus the max child height
+    currentHeight = 1 + max(leftRes.height, rightRes.height)
+
+    // The longest path that goes through p uses:
+    // left subtree height + right subtree height + 1 for p itself
+    pathThroughP = leftRes.height + rightRes.height + 1
+
+    // The best diameter in this subtree is the maximum of:
+    // - best diameter in left subtree
+    // - best diameter in right subtree
+    // - a path that goes through p
+    currentDiameter = max(pathThroughP, leftRes.diameter, rightRes.diameter)
+
+    return (height = currentHeight, diameter = currentDiameter)

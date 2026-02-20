@@ -4,6 +4,9 @@ import project20280.interfaces.Position;
 
 import java.util.ArrayList;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Concrete implementation of a binary tree using a node-based, linked structure.
  */
@@ -104,17 +107,14 @@ public class LinkedBinaryTree<E> extends AbstractBinaryTree<E> {
      */
     @Override
     public Iterable<Position<E>> children(Position<E> p) throws IllegalArgumentException {
-
         Node<E> node = validate(p);
 
         ArrayList<Position<E>> snapshot = new ArrayList<>(2);
 
-        // Add left child if it exists
         if (node.getLeft() != null) {
             snapshot.add(node.getLeft());
         }
 
-        // Add right child if it exists
         if (node.getRight() != null) {
             snapshot.add(node.getRight());
         }
@@ -129,7 +129,6 @@ public class LinkedBinaryTree<E> extends AbstractBinaryTree<E> {
      */
     // (d) addRoot: creates the root node in an empty tree and returns its position.
     public Position<E> addRoot(E e) throws IllegalStateException {
-        // (d) start by implementing addRoot
         if (!isEmpty()) throw new IllegalStateException("Tree is not empty");
         root = createNode(e, null, null, null);
         size = 1;
@@ -141,7 +140,6 @@ public class LinkedBinaryTree<E> extends AbstractBinaryTree<E> {
      * If you keep it, it should not break anything.
      */
     public void insert(E e) {
-        // (e) not required for LinkedBinaryTreeTest; included for completeness
         if (root == null) {
             addRoot(e);
             return;
@@ -154,7 +152,6 @@ public class LinkedBinaryTree<E> extends AbstractBinaryTree<E> {
      * Recursively insert in Binary Search Tree (BST) style (only meaningful if E is Comparable).
      */
     private Node<E> addRecursive(Node<E> p, E e) {
-        // (e) not required by tests; basic BST insertion
         if (!(e instanceof Comparable))
             throw new IllegalArgumentException("insert requires Comparable elements");
 
@@ -190,7 +187,6 @@ public class LinkedBinaryTree<E> extends AbstractBinaryTree<E> {
      */
     // (d) addLeft: creates and attaches a new left child of p.
     public Position<E> addLeft(Position<E> p, E e) throws IllegalArgumentException {
-        // (d) implement addLeft
         Node<E> parent = validate(p);
         if (parent.getLeft() != null)
             throw new IllegalArgumentException("p already has a left child");
@@ -206,7 +202,6 @@ public class LinkedBinaryTree<E> extends AbstractBinaryTree<E> {
      */
     // (d) addRight: creates and attaches a new right child of p.
     public Position<E> addRight(Position<E> p, E e) throws IllegalArgumentException {
-        // (d) implement addRight
         Node<E> parent = validate(p);
         if (parent.getRight() != null)
             throw new IllegalArgumentException("p already has a right child");
@@ -221,7 +216,6 @@ public class LinkedBinaryTree<E> extends AbstractBinaryTree<E> {
      * Replaces the element at Position p with element e and returns the replaced element.
      */
     public E set(Position<E> p, E e) throws IllegalArgumentException {
-        // (e) standard mutator used by other structures
         Node<E> node = validate(p);
         E old = node.getElement();
         node.setElement(e);
@@ -233,7 +227,6 @@ public class LinkedBinaryTree<E> extends AbstractBinaryTree<E> {
      */
     public void attach(Position<E> p, LinkedBinaryTree<E> t1, LinkedBinaryTree<E> t2)
             throws IllegalArgumentException {
-        // (e) not used by your LinkedBinaryTreeTest, but commonly required
         Node<E> node = validate(p);
         if (isInternal(p)) throw new IllegalArgumentException("p must be a leaf");
 
@@ -258,26 +251,21 @@ public class LinkedBinaryTree<E> extends AbstractBinaryTree<E> {
      * Removes the node at Position p and replaces it with its child, if any.
      */
     public E remove(Position<E> p) throws IllegalArgumentException {
-        // (e) required by tests
         Node<E> node = validate(p);
 
         Node<E> left = node.getLeft();
         Node<E> right = node.getRight();
 
-        // cannot remove a node with two children using this simple remove
         if (left != null && right != null)
             throw new IllegalArgumentException("p has two children");
 
-        // child is either the single child, or null (if leaf)
         Node<E> child = (left != null ? left : right);
 
-        // reconnect child to node's parent
         if (child != null) {
             child.setParent(node.getParent());
         }
 
         if (node == root) {
-            // removing the root: child becomes new root (or null if tree becomes empty)
             root = child;
         } else {
             Node<E> parent = node.getParent();
@@ -287,12 +275,11 @@ public class LinkedBinaryTree<E> extends AbstractBinaryTree<E> {
 
         size--;
 
-        // mark removed node as defunct and help garbage collection
         E old = node.getElement();
         node.setElement(null);
         node.setLeft(null);
         node.setRight(null);
-        node.setParent(node); // defunct convention used by validate
+        node.setParent(node);
         return old;
     }
 
@@ -303,7 +290,6 @@ public class LinkedBinaryTree<E> extends AbstractBinaryTree<E> {
     //     then toString() and any method using positions() will output the tree
     //     in preorder order rather than inorder order, causing different traversal results.
     public String toString() {
-        // (g) toString delegates to inorder positions
         return positions().toString();
     }
 
@@ -327,7 +313,6 @@ public class LinkedBinaryTree<E> extends AbstractBinaryTree<E> {
     }
 
     private Node<E> createLevelOrderHelper(ArrayList<E> l, Node<E> parent, int i) {
-        // (e) recursive builder for ArrayList version
         if (i >= l.size()) return null;
         E val = l.get(i);
         if (val == null) return null;
@@ -340,28 +325,47 @@ public class LinkedBinaryTree<E> extends AbstractBinaryTree<E> {
 
     /**
      * Builds a tree from a level-order array representation.
-     * This is required by your unit tests.
+     * Index i has children at 2i+1 and 2i+2.
+     *
+     * Wk5 Q2: This method constructs the tree from the array used in the question:
+     *         {"A","B","C","D","E",null,"F",null,null,"G","H",null,null,null,null}.
+     *         Null entries mean "no node at this position".
      */
+    // Null entries mean "no node at this position".
+    // Children index rules: left = 2*i+1, right = 2*i+2.
     public void createLevelOrder(E[] arr) {
-        // (e) required by tests
+        // Wk5 Q2: handle empty input array (tree becomes empty)
         if (arr == null || arr.length == 0) {
             root = null;
             size = 0;
             return;
         }
 
+        // Wk5 Q2: build the linked structure using the recursive helper and index rules
         root = createLevelOrderHelper(arr, null, 0);
 
-        // (h) set size without relying on positions()/isEmpty()
+        // Wk5 Q2: update size by counting created nodes (non-null entries that are reachable)
         size = countNodes(root);
     }
 
-
+    /**
+     * Recursive helper for createLevelOrder(E[] arr).
+     *
+     * Wk5 Q2: Uses level-order index mapping:
+     *         left child index  = 2*i + 1
+     *         right child index = 2*i + 2
+     *         If arr[i] is null, no node is created and recursion stops on that branch.
+     */
+    // Wk5 Q2: Recursive helper for createLevelOrder.
+    // Stops when index is out of bounds or arr[i] is null.
     private Node<E> createLevelOrderHelper(E[] arr, Node<E> parent, int i) {
-        // (e) recursive builder for array version
+        // Wk5 Q2: stop if index is outside the array
         if (i >= arr.length) return null;
+
+        // Wk5 Q2: null means no node at this position
         if (arr[i] == null) return null;
 
+        // Wk5 Q2: create the node and recursively build its children
         Node<E> node = createNode(arr[i], parent, null, null);
         node.setLeft(createLevelOrderHelper(arr, node, 2 * i + 1));
         node.setRight(createLevelOrderHelper(arr, node, 2 * i + 2));
@@ -432,22 +436,201 @@ public class LinkedBinaryTree<E> extends AbstractBinaryTree<E> {
         }
     }
 
-    // Q2
-    // Counts the number of external nodes (leaves) in the subtree rooted at p.
+    // ----------------- Week 5 questions -----------------
+
+    /**
+     * Wk5 Q2: Counts the number of external nodes (leaves) in the subtree rooted at p.
+     * A node is external if it has no left child and no right child.
+     */
     private int countExternal(Position<E> p) {
         if (p == null) return 0;
 
-        // A node is external if it has no left and no right child.
         if (left(p) == null && right(p) == null) return 1;
 
         return countExternal(left(p)) + countExternal(right(p));
     }
 
-    // Counts the number of external nodes (leaves) in the whole tree.
+    /**
+     * Wk5 Q2: Counts the number of external nodes (leaves) in the whole tree.
+     */
     public int numExternal() {
         if (root() == null) return 0;
         return countExternal(root());
     }
+
+    /**
+     * Wk5 Q2: Demonstration main for building a tree from a level-order array and printing it.
+     * This matches the example given in the question and should print the required structure.
+     */
+    // Wk5 Q2: Demonstration of building a tree from a level-order array and printing it.
+   // This matches the example in the question and should print the required structure.
+    public static void wk5Q2LevelOrderDemo() {
+        LinkedBinaryTree<String> bt = new LinkedBinaryTree<>();
+        String[] arr = { "A", "B", "C", "D", "E", null, "F", null, null, "G", "H", null, null, null, null };
+        bt.createLevelOrder(arr);
+        System.out.println(bt.toBinaryTreeString());
+    }
+
+    /**
+     * Wk5 Q3:
+     * Constructs this tree from inorder and preorder traversals.
+     * Assumes:
+     *  - All elements are unique
+     *  - inorder and preorder contain the same elements
+     * After construction, this tree's root/size are updated.
+     */
+    public void construct(E[] inorder, E[] preorder) {
+
+        if (inorder == null || preorder == null || inorder.length != preorder.length) {
+            throw new IllegalArgumentException("Invalid traversal arrays");
+        }
+
+        if (inorder.length == 0) {
+            root = null;
+            size = 0;
+            return;
+        }
+
+        // Build a quick lookup: value -> index in inorder
+        Map<E, Integer> inIndex = new HashMap<>();
+        for (int i = 0; i < inorder.length; i++) {
+            inIndex.put(inorder[i], i);
+        }
+
+        // Use an index wrapper so recursion can advance through preorder
+        int[] preIdx = new int[]{0};
+
+        // Build the tree
+        root = constructHelper(inorder, preorder, 0, inorder.length - 1, preIdx, null, inIndex);
+
+        // Update size without relying on positions()/isEmpty()
+        size = countNodes(root);
+    }
+
+    /**
+     * Wk5 Q3:
+     * Recursive helper to build subtree from inorder[inL...inR] using preorder[preIdx[0]...].
+     *
+     * Algorithm:
+     *  - preorder gives the root of the current subtree first
+     *  - find that root in inorder to split left/right subtrees
+     */
+    private Node<E> constructHelper(
+            E[] inorder,
+            E[] preorder,
+            int inL,
+            int inR,
+            int[] preIdx,
+            Node<E> parent,
+            Map<E, Integer> inIndex) {
+
+        // No elements in this inorder range means no subtree
+        if (inL > inR) return null;
+
+        // Next preorder element is the root of this subtree
+        E rootVal = preorder[preIdx[0]];
+        preIdx[0]++;
+
+        // Create the node and set its parent link
+        Node<E> node = createNode(rootVal, parent, null, null);
+
+        // Split inorder into left and right parts around rootVal
+        Integer midObj = inIndex.get(rootVal);
+        if (midObj == null) {
+            throw new IllegalArgumentException("Traversals contain different elements");
+        }
+        int mid = midObj;
+
+        // Build left subtree from inorder[inL..mid-1]
+        node.setLeft(constructHelper(inorder, preorder, inL, mid - 1, preIdx, node, inIndex));
+
+        // Build right subtree from inorder[mid+1...inR]
+        node.setRight(constructHelper(inorder, preorder, mid + 1, inR, preIdx, node, inIndex));
+
+        return node;
+    }
+    // Test in ConstructTest.java class
+
+    // Wk5 Q4: Returns a list of all root-to-leaf paths (left paths first, then right paths).
+    public ArrayList<ArrayList<E>> rootToLeafPaths() {
+        ArrayList<ArrayList<E>> result = new ArrayList<>();
+
+        if (root() == null) return result;
+
+        ArrayList<E> currentPath = new ArrayList<>();
+        rootToLeafPathsHelper(root(), currentPath, result);
+
+        return result;
+    }
+
+    // Wk5 Q4: Recursive helper that builds paths using backtracking.
+    private void rootToLeafPathsHelper(Position<E> p,
+                                       ArrayList<E> currentPath,
+                                       ArrayList<ArrayList<E>> result) {
+
+        if (p == null) return;
+
+        // Add current node to the path
+        currentPath.add(p.getElement());
+
+        // If this node is a leaf, store a copy of the current path
+        if (left(p) == null && right(p) == null) {
+            result.add(new ArrayList<>(currentPath));
+        } else {
+            // Explore left subtree first, then right subtree
+            if (left(p) != null) rootToLeafPathsHelper(left(p), currentPath, result);
+            if (right(p) != null) rootToLeafPathsHelper(right(p), currentPath, result);
+        }
+
+        // Remove current node before returning to parent (backtracking)
+        currentPath.remove(currentPath.size() - 1);
+    }
+    // Test in RandomTreeDemo for a random tree or in LinkedBinaryTreeTest exactly as given example
+
+    // Helper record-like class to return both height and diameter from recursion.
+    private static class HD {
+        int height;    // height in number of nodes
+        int diameter;  // diameter in number of nodes
+
+        HD(int h, int d) {
+            height = h;
+            diameter = d;
+        }
+    }
+
+    /**
+     * Returns the diameter (width) of the tree, measured as number of nodes
+     * on the longest path between any two nodes.
+     */
+    public int diameterNodes() {
+        if (root() == null) return 0;
+        return diameterNodesHelper(root()).diameter;
+    }
+
+    /**
+     * Recursively computes height and diameter for the subtree rooted at p.
+     * Height is measured in number of nodes.
+     */
+    private HD diameterNodesHelper(Position<E> p) {
+        // Base case for empty subtree
+        if (p == null) return new HD(0, 0);
+
+        // Compute results for left and right subtrees
+        HD leftRes = diameterNodesHelper(left(p));
+        HD rightRes = diameterNodesHelper(right(p));
+
+        // Height in nodes: 1 for current node + max child height
+        int height = 1 + Math.max(leftRes.height, rightRes.height);
+
+        // Longest path through this node (in nodes)
+        int through = leftRes.height + rightRes.height + 1;
+
+        // Best diameter in this subtree
+        int diameter = Math.max(through, Math.max(leftRes.diameter, rightRes.diameter));
+
+        return new HD(height, diameter);
+    }
+    // Test with example given in DiameterDemo.java class
 
     // To test counting number of external nodes works as intended
     public static void main(String[] args) {
@@ -455,8 +638,10 @@ public class LinkedBinaryTree<E> extends AbstractBinaryTree<E> {
         Position<Integer> r = bt.addRoot(1);
         bt.addLeft(r, 2);
         bt.addRight(r, 3);
+        System.out.println(bt.numExternal()); // expected 2
 
-        System.out.println(bt.numExternal()); // expected output is 2 (2 and 3)
+        // Wk5 Q2: uncomment to run the level-order printing demo
+        wk5Q2LevelOrderDemo();
     }
 
 }
