@@ -1,0 +1,40 @@
+(a) Write the pseudo-code for a fully recursive function which copies a linked list?
+
+FUNCTION copyNodes(node)
+
+    // Base case: if the current node is null,
+    // there are no more nodes to copy
+    IF node == null THEN
+        RETURN null
+    END IF
+
+    // Create a new node containing the same element
+    // The next reference is temporarily set to null
+    newNode = new Node(node.element, null)
+
+    // Recursively copy the remainder of the list
+    // and attach it to the new node
+    newNode.next = copyNodes(node.next)
+
+    // Return the head of the newly copied sublist
+    RETURN newNode
+
+END FUNCTION
+
+FUNCTION recursiveCopyList(head)
+
+    // Create a new empty list that will store the copy
+    newList = new empty list
+
+    // Recursively copy all nodes starting from the head
+    // and set the head of the new list to the copied chain
+    newList.head = copyNodes(head)
+
+    // The size of the new list is the same as the original list
+    // (this can be set directly or computed during recursion)
+    newList.size = size of original list
+
+    // Return the fully copied list
+    RETURN newList
+
+END FUNCTION

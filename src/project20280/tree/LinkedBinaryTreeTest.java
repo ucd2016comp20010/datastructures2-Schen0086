@@ -125,4 +125,18 @@ class LinkedBinaryTreeTest {
                 bt.rootToLeafPaths().toString());
     }
 
+    // Wk6 Q9 test:
+    @Test
+    void testPrintLeavesLeftToRight() {
+        LinkedBinaryTree<String> bt = new LinkedBinaryTree<>();
+
+        String[] arr = {
+                "A","B","C","D","E",null,"F",
+                null,null,"G","H",null,null,null,null
+        };
+
+        bt.createLevelOrder(arr);
+
+        assertEquals("[D, G, H, F]", bt.printLeavesLeftToRight().toString());
+    }
 }

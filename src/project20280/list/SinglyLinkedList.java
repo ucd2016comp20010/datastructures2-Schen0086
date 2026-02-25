@@ -211,7 +211,7 @@ public class SinglyLinkedList<E> implements List<E>, Iterable<E> {
     public void reverse() {
         Node<E> prev = null;        // will become the new head
         Node<E> curr = head;        // start from current head
-        Node<E> next;        // temporary pointer
+        Node<E> next;               // temporary pointer
 
         while (curr != null) {
             next = curr.getNext();  // store next node
@@ -234,4 +234,20 @@ public class SinglyLinkedList<E> implements List<E>, Iterable<E> {
         return twin;
     }
 
+    // Wk6 Q7(b)
+    public SinglyLinkedList<E> recursiveCopy() {
+        SinglyLinkedList<E> twin = new SinglyLinkedList<>();
+        twin.head = recursiveCopyNodes(this.head);
+        twin.size = this.size; // size is the same as original
+        return twin;
+    }
+
+    // helper: recursively copy the node chain starting at 'node'
+    private Node<E> recursiveCopyNodes(Node<E> node) {
+        if (node == null) return null;
+
+        Node<E> newNode = new Node<>(node.getElement(), null);
+        newNode.setNext(recursiveCopyNodes(node.getNext()));
+        return newNode;
+    }
 }

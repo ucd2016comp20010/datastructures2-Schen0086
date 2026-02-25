@@ -1,0 +1,13 @@
+(a) Write the pseudo-code for a fully recursive function which copies a linked list?
+
+FUNCTION printReverse(node)
+
+    IF node == null THEN
+        RETURN
+    END IF
+
+    printReverse(node.next)
+
+    PRINT node.element
+
+END FUNCTION

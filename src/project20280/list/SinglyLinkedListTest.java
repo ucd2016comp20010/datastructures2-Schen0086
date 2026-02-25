@@ -210,4 +210,49 @@ class SinglyLinkedListTest {
         assertEquals("[1, 2, 3, 99]", twin.toString());
         assertEquals("[2, 3]", ll.toString());
     }
+
+    // Wk6 Q7(b) test cases
+    @Test
+    void testRecursiveCopyEmpty() {
+        SinglyLinkedList<Integer> ll = new SinglyLinkedList<>();
+        SinglyLinkedList<Integer> twin = ll.recursiveCopy();
+
+        assertNotSame(ll, twin);
+        assertEquals("[]", twin.toString());
+        assertEquals(0, twin.size());
+    }
+
+    @Test
+    void testRecursiveCopyContentsSame() {
+        SinglyLinkedList<Integer> ll = new SinglyLinkedList<>();
+        ll.addLast(1);
+        ll.addLast(2);
+        ll.addLast(3);
+
+        SinglyLinkedList<Integer> twin = ll.recursiveCopy();
+
+        assertNotSame(ll, twin);
+        assertEquals(ll.toString(), twin.toString());
+        assertEquals(ll.size(), twin.size());
+    }
+
+    @Test
+    void testRecursiveCopyIsIndependent() {
+        SinglyLinkedList<Integer> ll = new SinglyLinkedList<>();
+        ll.addLast(1);
+        ll.addLast(2);
+        ll.addLast(3);
+
+        SinglyLinkedList<Integer> twin = ll.recursiveCopy();
+
+        // change original, copy should not change
+        ll.removeFirst();
+        assertEquals("[2, 3]", ll.toString());
+        assertEquals("[1, 2, 3]", twin.toString());
+
+        // change copy, original should not change
+        twin.addLast(99);
+        assertEquals("[1, 2, 3, 99]", twin.toString());
+        assertEquals("[2, 3]", ll.toString());
+    }
 }

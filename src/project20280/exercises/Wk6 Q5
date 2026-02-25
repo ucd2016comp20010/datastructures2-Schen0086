@@ -1,0 +1,26 @@
+(a)  What does the function Foo do?
+Foo prints the binary representation of a positive integer x.
+
+It prints the bits from most significant to least significant because:
+- It first goes down to the smallest division,
+- Then prints remainders on the way back up.
+
+(b) What is the output of Foo(2468)?
+
+| x    | x / 2 | x % 2 |
+| ---- | ----- | ----- |
+| 2468 | 1234  | 0     |
+| 1234 | 617   | 0     |
+| 617  | 308   | 1     |
+| 308  | 154   | 0     |
+| 154  | 77    | 0     |
+| 77   | 38    | 1     |
+| 38   | 19    | 0     |
+| 19   | 9     | 1     |
+| 9    | 4     | 1     |
+| 4    | 2     | 0     |
+| 2    | 1     | 0     |
+| 1    | 0     | 1     |
+
+Printed as: 100110100100
+Foo(2468) = 100110100100

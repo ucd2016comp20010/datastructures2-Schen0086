@@ -1,25 +1,33 @@
-function countExternal(T, p):
+FUNCTION countExternal(T, p)
+
     // T is the binary tree
     // p is the current position being examined
 
     // Base case: if there is no node, there are no leaves here
-    if p is null:
-        return 0
+    IF p IS null THEN
+        RETURN 0
+    END IF
 
     // If p has no left child and no right child, it is a leaf
-    if T.left(p) is null AND T.right(p) is null:
-        return 1          // Count this external node
+    IF T.left(p) IS null AND T.right(p) IS null THEN
+        RETURN 1          // Count this external node
+    END IF
 
     // Otherwise, count leaves in left and right subtrees
-    return countExternal(T, T.left(p))
-         + countExternal(T, T.right(p))
+    RETURN countExternal(T, T.left(p))
+           + countExternal(T, T.right(p))
 
+END FUNCTION
 
-function numExternal(T):
+FUNCTION numExternal(T)
+
     // If the tree is empty, it has no external nodes
-    if T.root() is null:
-        return 0
+    IF T.root() IS null THEN
+        RETURN 0
+    END IF
 
     // Start counting from the root
-    return countExternal(T, T.root())
+    RETURN countExternal(T, T.root())
+
+END FUNCTION
 

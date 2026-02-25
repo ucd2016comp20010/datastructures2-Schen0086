@@ -1,0 +1,16 @@
+FUNCTION copyNodes(node):
+    IF node == null THEN
+        RETURN null
+    END IF
+
+    newNode = new Node(node.element, null)
+    newNode.next = copyNodes(node.next)
+    RETURN newNode
+END FUNCTION
+
+FUNCTION recursiveCopyList(head):
+    newList = new empty list
+    newList.head = copyNodes(head)
+    newList.size = size of original list   // can be set during recursion or copied directly
+    RETURN newList
+END FUNCTION

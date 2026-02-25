@@ -4,6 +4,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+// Wk5 Q6
+
 /**
  * Generates random binary trees for n = 50..5000 step 50.
  * For each n, builds 100 random trees and computes average height.

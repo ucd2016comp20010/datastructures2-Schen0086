@@ -1,0 +1,39 @@
+What is the ninth term in the sequence?
+
+Using function in Tribonacci.java:
+Tribonacci(9) = 44
+
+
+Draw the recursion trace for Tribonnaci(9).
+
+Using the recursive definition:
+T(n) = T(n-1) + T(n-2) + T(n-3)
+
+T(9)
+├── T(8)
+│   ├── T(7)
+│   │   ├── T(6)
+│   │   │   ├── T(5)
+│   │   │   │   ├── T(4)
+│   │   │   │   │   ├── T(3)
+│   │   │   │   │   │   ├── T(2)=1
+│   │   │   │   │   │   ├── T(1)=0
+│   │   │   │   │   │   └── T(0)=0
+│   │   │   │   │   ├── T(2)=1
+│   │   │   │   │   └── T(1)=0
+│   │   │   │   ├── T(3)
+│   │   │   │   │   ├── T(2)=1
+│   │   │   │   │   ├── T(1)=0
+│   │   │   │   │   └── T(0)=0
+│   │   │   │   └── T(2)=1
+│   │   │   ├── T(4)
+│   │   │   │   ├── T(3)
+│   │   │   │   ├── T(2)
+│   │   │   │   └── T(1)
+│   │   │   └── T(3)
+│   │   ├── T(5)
+│   │   └── T(4)
+│   ├── T(6)
+│   └── T(5)
+├── T(7)
+└── T(6)

@@ -1,0 +1,17 @@
+mystery(2, 4, 4)
+
+Step 1: Initial Call
+mystery(2, 4, 4)
+Since n != 1, go to the else case:
+= 4 + mystery(1, 4, 4)
+
+Step 2: Recursive Call
+mystery(1, 4, 4)
+Now n == 1, so return a:
+= 4
+
+Step 3: Substitute Back
+mystery(2,4,4)
+= 4 + mystery(1,4,4)
+= 4 + 4
+= 8

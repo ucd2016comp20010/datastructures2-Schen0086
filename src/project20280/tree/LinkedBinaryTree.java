@@ -632,6 +632,29 @@ public class LinkedBinaryTree<E> extends AbstractBinaryTree<E> {
     }
     // Test with example given in DiameterDemo.java class
 
+    //Wk6 Q9
+    public ArrayList<E> printLeavesLeftToRight() {
+        ArrayList<E> leaves = new ArrayList<>();
+        printLeavesHelper(root(), leaves);
+        return leaves;
+    }
+
+    //Wk6 Q9:
+    private void printLeavesHelper(Position<E> p, ArrayList<E> leaves) {
+        if (p == null) return;
+
+        // if leaf node
+        if (left(p) == null && right(p) == null) {
+            leaves.add(p.getElement());
+            return;
+        }
+
+        // traverse left then right
+        printLeavesHelper(left(p), leaves);
+        printLeavesHelper(right(p), leaves);
+    }
+    // To test, see LinkedBinaryTreeTest "Wk6 Q9"
+
     // To test counting number of external nodes works as intended
     public static void main(String[] args) {
         LinkedBinaryTree<Integer> bt = new LinkedBinaryTree<>();

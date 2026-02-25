@@ -1,0 +1,29 @@
+What do you expect the complexity T(n) of the inorder method of the LinkedBinaryTree to be?
+
+Each node is processed once, and each recursive call does constant work.
+
+Therefore:
+T(n) = T(nL) + T(nR) + O(1)
+
+Since nL + nR = n - 1,
+T(n) = O(n)
+
+So the expected time complexity is:
+O(n)
+
+Linear time.
+
+inorder_scaling.csv
+If complexity is O(n):
+
+- Graph looks like a straight increasing line on google sheets
+- Trendline equation looks like:
+t = an + b
+- R² should be close to 1
+
+Result gotten:
+
+y = 11x + 5335
+R² = 0.915
+
+Confirms linear growth.

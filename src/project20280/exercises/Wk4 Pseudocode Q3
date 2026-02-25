@@ -1,33 +1,41 @@
-function countLeftExternal(T, p):
+FUNCTION countLeftExternal(T, p)
 
     // Base case: empty subtree has no left external nodes
-    if p is null:
-        return 0
+    IF p IS null THEN
+        RETURN 0
+    END IF
 
-    count = 0     // Stores how many left external nodes are found at p
+    count ← 0     // Stores how many left external nodes are found at p
 
     // Check if p is a leaf (external node)
-    if T.left(p) is null and T.right(p) is null:
+    IF T.left(p) IS null AND T.right(p) IS null THEN
 
         // Check if p has a parent and is the left child of that parent
-        if T.parent(p) is not null and T.left(T.parent(p)) == p:
-            count = 1     // p is a left external node
+        IF T.parent(p) IS NOT null AND T.left(T.parent(p)) = p THEN
+            count ← 1     // p is a left external node
+        END IF
+
+    END IF
 
     // Recursively count in left and right subtrees and add current count
-    return count
+    RETURN count
            + countLeftExternal(T, T.left(p))
            + countLeftExternal(T, T.right(p))
 
+END FUNCTION
 
-function numLeftExternal(T):
+
+FUNCTION numLeftExternal(T)
 
     // If the tree is empty, there are no left external nodes
-    if T.root() is null:
-        return 0
+    IF T.root() IS null THEN
+        RETURN 0
+    END IF
 
     // Start counting from the root
-    return countLeftExternal(T, T.root())
+    RETURN countLeftExternal(T, T.root())
 
+END FUNCTION
 -----------------------------------------------------------------------------------
 
 Example:
