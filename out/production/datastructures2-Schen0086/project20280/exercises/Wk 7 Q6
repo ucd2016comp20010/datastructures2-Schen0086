@@ -1,0 +1,21 @@
+Q6
+a) What time complexity do you expect?
+
+Expected complexity:
+Θ(nlogn)
+
+Reason:
+
+Building the PQ by n inserts: each insert is
+O(logn) ⇒ total O(nlogn)
+
+Removing min n times: each removeMin is
+O(logn) ⇒ totalO(nlogn)
+
+So PQSort overall is:
+O(nlogn)+O(nlogn)=O(nlogn)
+
+b) What do you find?
+
+When you print time/(n log2 n) (the “ratio” column), if the algorithm is truly nlogn,
+that ratio should be roughly constant as n grows (it won’t be perfectly constant because of cache/memory/JVM effects).

@@ -1,0 +1,65 @@
+Q1 Heap after each heap.insert()
+
+Each heap in level-order array form (and as levels).
+
+insert 2
+[2]
+Levels: 2
+
+insert 5
+[5, 2]
+Levels: 5 | 2
+
+insert 16
+[16, 2, 5]
+Levels: 16 | 2 5
+
+insert 4
+[16, 4, 5, 2]
+Levels: 16 | 4 5 | 2
+
+insert 10
+[16, 10, 5, 2, 4]
+Levels: 16 | 10 5 | 2 4
+
+insert 23
+[23, 10, 16, 2, 4, 5]
+Levels: 23 | 10 16 | 2 4 5
+
+insert 39
+[39, 10, 23, 2, 4, 5, 16]
+Levels: 39 | 10 23 | 2 4 5 16
+
+insert 18
+[39, 18, 23, 10, 4, 5, 16, 2]
+Levels: 39 | 18 23 | 10 4 5 16 | 2
+
+insert 26
+[39, 26, 23, 18, 4, 5, 16, 2, 10]
+Levels: 39 | 26 23 | 18 4 5 16 | 2 10
+
+insert 15
+[39, 26, 23, 18, 15, 5, 16, 2, 10, 4]
+Levels: 39 | 26 23 | 18 15 5 16 | 2 10 4
+
+Final heap: [39, 26, 23, 18, 15, 5, 16, 2, 10, 4]
+
+
+Q2 Preorder traversal (root, left, right)
+39, 26, 18, 2, 10, 15, 4, 23, 5, 16
+
+
+Q3 Postorder traversal (left, right, root)
+2, 10, 18, 4, 15, 26, 5, 16, 23, 39
+
+
+Q4
+(a) Valid heap whose preorder is not descending?
+Yes. The heap we built is valid, but its preorder is:
+39, 26, 18, 2, 10, ...
+This is not descending (because 2 comes before 10).
+
+(b) Valid heap whose postorder is not ascending?
+Yes. For the same heap, postorder is:
+2, 10, 18, 4, 15, ...
+This is not ascending (because 18 comes before 4).

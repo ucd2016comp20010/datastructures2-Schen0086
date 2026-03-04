@@ -2,12 +2,19 @@
 
 FUNCTION printReverse(node)
 
+    // Base case: if the current node is null,
+    // there is nothing left to print
     IF node == null THEN
         RETURN
     END IF
 
+    // Recursively move to the next node first
+    // This continues until we reach the end of the list
     printReverse(node.next)
 
+    // When the recursion unwinds (returns),
+    // print the element stored at this node
+    // This causes elements to be printed in reverse order
     PRINT node.element
 
 END FUNCTION
