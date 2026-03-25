@@ -52,8 +52,12 @@ public class ChainHashMap<K, V> extends AbstractHashMap<K, V> {
      */
     @Override
     protected V bucketGet(int h, K k) {
-        // TODO
-        return null;
+        // Wk8 Q2: return null if no bucket exists at this hash index
+        if (table[h] == null) {
+            return null;
+        }
+        // Get the value from the bucket map
+        return table[h].get(k);
     }
 
     /**
@@ -67,8 +71,19 @@ public class ChainHashMap<K, V> extends AbstractHashMap<K, V> {
      */
     @Override
     protected V bucketPut(int h, K k, V v) {
-        // TODO
-        return null;
+        // Wk8 Q2: create a new bucket if this bucket is empty
+        if (table[h] == null) {
+            table[h] = new UnsortedTableMap<>();
+        }
+        // Store old bucket size to check if a new entry was added
+        int oldSize = table[h].size();
+        // Put the key-value pair into the bucket
+        V answer = table[h].put(k, v);
+        // Increase total map size if a new entry was inserted
+        if (table[h].size() > oldSize) {
+            n++;
+        }
+        return answer;
     }
 
 
@@ -82,8 +97,19 @@ public class ChainHashMap<K, V> extends AbstractHashMap<K, V> {
      */
     @Override
     protected V bucketRemove(int h, K k) {
-        // TODO
-        return null;
+        // Wk8 Q2: return null if no bucket exists at this hash index
+        if (table[h] == null) {
+            return null;
+        }
+        // Store old bucket size to check if an entry was removed
+        int oldSize = table[h].size();
+        // Remove the key from the bucket
+        V answer = table[h].remove(k);
+        // Decrease total map size if an entry was removed
+        if (table[h].size() < oldSize) {
+            n--;
+        }
+        return answer;
     }
 
     /**

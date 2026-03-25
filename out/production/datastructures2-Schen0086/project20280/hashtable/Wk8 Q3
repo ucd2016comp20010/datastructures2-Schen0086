@@ -1,0 +1,31 @@
+Using:
+h(i)=(3i+5)mod11
+
+for the keys:
+12, 44, 13, 88, 23, 94, 11, 39, 20, 16, 5
+
+the bucket positions are:
+12 → 8
+44 → 5
+13 → 0
+88 → 5
+23 → 8
+94 → 1
+11 → 5
+39 → 1
+20 → 10
+16 → 9
+5 → 9
+
+So the 11-entry hash table with separate chaining is:
+0  -> 13
+1  -> 94 -> 39
+2  -> empty
+3  -> empty
+4  -> empty
+5  -> 44 -> 88 -> 11
+6  -> empty
+7  -> empty
+8  -> 12 -> 23
+9  -> 16 -> 5
+10 -> 20

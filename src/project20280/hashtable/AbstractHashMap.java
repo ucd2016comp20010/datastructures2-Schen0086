@@ -1,7 +1,9 @@
 package project20280.hashtable;
 
 import project20280.interfaces.AbstractMap;
+import project20280.interfaces.Entry;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 /**
@@ -21,9 +23,9 @@ import java.util.Random;
 public abstract class AbstractHashMap<K, V> extends AbstractMap<K, V> {
     private final int prime;                   // prime factor
     private final long scale;
-    private final long shift;           // the shift and scaling factors
-    protected int n = 0;                 // number of entries in the dictionary
-    protected int capacity;              // length of the table
+    private final long shift;                  // the shift and scaling factors
+    protected int n = 0;                       // number of entries in the dictionary
+    protected int capacity;                    // length of the table
 
     /**
      * Creates a hash table with the given capacity and prime factor.
@@ -98,8 +100,15 @@ public abstract class AbstractHashMap<K, V> extends AbstractMap<K, V> {
      */
     @Override
     public V put(K key, V value) {
-        // TODO
-        return null;
+        // Wk8 Q5: insert the key-value pair into the correct bucket
+        V answer = bucketPut(hashValue(key), key, value);
+
+        // Wk8 Q5: resize the table if load factor becomes greater than 1/2
+        if (n > capacity / 2) {
+            resize(2 * capacity - 1);
+        }
+
+        return answer;
     }
 
     // private utilities
@@ -108,15 +117,31 @@ public abstract class AbstractHashMap<K, V> extends AbstractMap<K, V> {
      * Hash function applying MAD method to default hash code.
      */
     private int hashValue(K key) {
-        // TODO
-        return 0;
+        // Wk8 Q5: compress the key hash code into a valid table index using MAD hashing
+        return (int) ((Math.abs(key.hashCode() * scale + shift) % prime) % capacity);
     }
 
     /**
      * Updates the size of the hash table and rehashes all entries.
      */
     private void resize(int newCap) {
-        // TODO
+        // Wk8 Q5: store all existing entries before rebuilding the table
+        ArrayList<Entry<K, V>> buffer = new ArrayList<>();
+        for (Entry<K, V> e : entrySet()) {
+            buffer.add(e);
+        }
+
+        // Wk8 Q5: update capacity and create a new empty table
+        capacity = newCap;
+        createTable();
+
+        // Wk8 Q5: reset entry count before re-inserting entries
+        n = 0;
+
+        // Wk8 Q5: reinsert all saved entries into the resized table
+        for (Entry<K, V> e : buffer) {
+            put(e.getKey(), e.getValue());
+        }
     }
 
     // protected abstract methods to be implemented by subclasses
